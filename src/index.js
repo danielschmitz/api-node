@@ -7,6 +7,8 @@ app.get('/hello-world', function(req, res, next) {
     });
 })
 
+app.use('/api/auth', require('./api/auth'));
+
 app.listen(3000, function() {
     console.log('Express server listening on port 3000');
 })

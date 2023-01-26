@@ -1,3 +1,7 @@
 @host = http://localhost:3000
 
 GET {{host}}/hello-world
+
+###
+
+GET {{host}}/api/auth/hello-world
