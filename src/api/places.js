@@ -1,4 +1,5 @@
 const express = require('express')
+const auth = require('../auth')
 const router = express.Router()
 const db = require('../db')
 
@@ -13,9 +14,9 @@ const validatePlace = (req, res, next) => {
 }
 
 // Create place
-router.post('/', validatePlace, (req, res) => {
-  const { name, address, price, user_id, city_id } = req.body
-  db.insert({ name, address, price, user_id, city_id }).into('places')
+router.post('/', [validatePlace, auth.isHost], (req, res) => {
+  const { name, address, price, city_id } = req.body
+  db.insert({ name, address, price, user_id: req.auth.id, city_id }).into('places')
     .then(data => res.json(data))
     .catch(err => res.status(500).send({ error: err.message }))
 })
@@ -27,6 +28,15 @@ router.get('/', (req, res) => {
     .catch(err => res.status(500).send({ error: err.message }))
 })
 
+// Get all places from logged user
+router.get('/user', auth.isHost, (req, res) => {
+  const { user_id } = req.auth
+  db.select().from('places')
+    .where({ user_id })
+    .then(data => res.json(data))
+    .catch(err => res.status(500).send({ error: err.message }))
+})
+
 // Get one place by id
 router.get('/:id', (req, res) => {
   db.select().from('places').where({ id: req.params.id })
@@ -35,15 +45,17 @@ router.get('/:id', (req, res) => {
 })
 
 // Update place
-router.patch('/:id', validatePlace, (req, res) => {
-  const { name, address, price, user_id, city_id } = req.body
-  db('places').where({ id: req.params.id }).update({ name, address, price, user_id, city_id })
+router.patch('/:id', [validatePlace, auth.isHost, auth.hasSameUserId], (req, res) => {
+  const { name, address, price, city_id } = req.body
+  db('places')
+    .where({ id: req.params.id })
+    .update({ name, address, price, user_id: req.auth.id, city_id })
     .then(data => res.send(data))
     .catch(err => res.status(500).send({ error: err.message }))
 })
 
 // Delete place
-router.delete('/:id', (req, res) => {
+router.delete('/:id',[auth.hasSameUserId], (req, res) => {
   db('places').where({ id: req.params.id }).del()
     .then(() => res.send({ message: 'Place deleted' }))
     .catch(err => res.status(500).send({ error: err.message }))

@@ -99,3 +99,33 @@ content-type: application/json
 }
 
 
+
+### Get All places
+GET {{host}}/api/places
+
+### Get 1 place
+GET {{host}}/api/places/1
+
+### New place
+POST {{host}}/api/places/
+Authorization: {{token}}
+content-type: application/json
+
+{
+    "name": "Place 1a",
+    "address": "Address 1a",
+    "price": 222.9,
+    "user_id": 1,
+    "city_id": 1
+}
+
+### Edit place
+PUT {{host}}/api/places/16
+content-type: application/json
+
+{
+    "name": "Juiz de Fora 2",
+    "country_id": "1"
+}
+
+
