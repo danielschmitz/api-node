@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "node --watch src/index.js",
-    "createdb": "knex migrate:rollback --all && knex migrate:latest && knex seed:run",
+    "createdb": "knex migrate:rollback --all && knex migrate:latest",
     "eslint": "npx eslint . --ext .js"
   },
   "repository": {

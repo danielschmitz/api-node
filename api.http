@@ -44,3 +44,34 @@ content-type: application/json
     "password": "123456",
     "ishost": true
 }
+
+### Get All countries
+GET {{host}}/api/countries
+
+### Get 1 country
+GET {{host}}/api/countries/1
+
+### GET all cities of one country by country id
+GET {{host}}/api/countries/1/cities
+
+### New Country
+POST {{host}}/api/countries/
+content-type: application/json
+
+{
+    "name": "United States 22222",
+    "capital": "Washington, D.C.",
+    "continent": "North America"
+}
+
+### Edit Country
+PUT {{host}}/api/countries/1
+content-type: application/json
+
+{
+    "name": "United States 2",
+    "capital": "Washington, D.C.",
+    "continent": "North America"
+}
+
+
