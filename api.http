@@ -1,7 +1,25 @@
 @host = http://localhost:3000
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1c2VyMUBlbWFpbC5jb20iLCJuYW1lIjoidXNlcjEiLCJpc2hvc3QiOjAsImlhdCI6MTY3NDgxNzExOSwiZXhwIjoxNzA2Mzc0NzE5fQ.1xPM40oFV-ooBnlH42iNZ-SUVDhclHrmg4viAKJIXUs
 
+### Simple hello world
 GET {{host}}/hello-world
 
-###
+### simple hello world from /api/auth
 
 GET {{host}}/api/auth/hello-world
+
+### Try Login, return token
+
+POST {{host}}/api/auth/login
+content-type: application/json
+
+{
+    "email": "user1@email.com",
+    "password": "123456"
+}
+
+### Test Login
+GET {{host}}/api/auth/checklogin
+Authorization: {{token}}
+
+###

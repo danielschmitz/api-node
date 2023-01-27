@@ -1,17 +1,29 @@
-var express = require('express');
+var express = require('express')
 var app = express()
 
-app.get('/hello-world', function(req, res, next) {
+// ### CORS ###
+const cors = require('cors')
+app.use(cors({
+    exposedHeaders: 'Authorization'
+}))
+
+// ### BODY PARSER ###
+const BodyParser = require('body-parser')
+app.use(BodyParser.json())
+app.use(BodyParser.urlencoded({ extended: true }))
+
+// ### Hello World! ###
+app.get('/hello-world', function (req, res) {
     return res.json({
-        mensagem: "hello world"
-    });
+        message: 'hello world'
+    })
 })
 
-app.use('/api/auth', require('./api/auth'));
+// ### API ###
+app.use('/api/auth', require('./api/auth'))
 
-app.listen(3000, function() {
-    console.log('Express server listening on port 3000');
+// eslint-disable-next-line no-undef
+const PORT = process.env.PORT || 3000
+app.listen(PORT, function () {
+    console.log('Express server listening on port 3000')
 })
-
-
-
