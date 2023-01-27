@@ -3,7 +3,7 @@ const password = '123456'
 const hash = bcrypt.hashSync(password, 10)
 
 const users = [
-    { name: 'user1', email: 'user1@email.com', password: hash, ishost: false },
+    { name: 'user1', email: 'user1@email.com', password: hash, ishost: true },
     { name: 'user2', email: 'user2@email.com', password: hash, ishost: false },
     { name: 'user3', email: 'user3@email.com', password: hash, ishost: false },
     { name: 'host1', email: 'host1@email.com', password: hash, ishost: true },

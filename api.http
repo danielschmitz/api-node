@@ -1,5 +1,5 @@
 @host = http://localhost:3000
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1c2VyMUBlbWFpbC5jb20iLCJuYW1lIjoidXNlcjEiLCJpc2hvc3QiOjAsImlhdCI6MTY3NDgxOTkyMSwiZXhwIjoxNzA2Mzc3NTIxfQ.oNyuciQCm0z7NOIlGhlREoURzie9gg0aCJWogHsdn5U
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1c2VyMUBlbWFpbC5jb20iLCJuYW1lIjoidXNlcjEiLCJpc2hvc3QiOjEsImlhdCI6MTY3NDgzMzA3OSwiZXhwIjoxNzA2MzkwNjc5fQ.L8AndWnE0c3aggnABY0DoOT2p69Vu2pVv_hsw_dhjGA
 
 ### Simple hello world
 GET {{host}}/hello-world
@@ -106,7 +106,9 @@ GET {{host}}/api/places
 ### Get 1 place
 GET {{host}}/api/places/1
 
-
+### Get user places
+GET {{host}}/api/places/user
+Authorization: {{token}}
 
 ### New place
 POST {{host}}/api/places/

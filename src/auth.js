@@ -29,7 +29,7 @@ const auth = {
                 return res.status(StatusCodes.UNAUTHORIZED).send({ message: 'Unauthorized' })
             }
 
-            if (!auth.isHost) {
+            if (!auth.ishost) {
                 return res.status(StatusCodes.UNAUTHORIZED).send({ message: 'user is not host' })
 
             }
@@ -41,8 +41,6 @@ const auth = {
     },
 
     hasSameUserId: async (req, res, next) => {
-
-        console.log(1)
 
         const token = req.headers.authorization
         if (!token) {

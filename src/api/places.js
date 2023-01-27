@@ -30,9 +30,9 @@ router.get('/', (req, res) => {
 
 // Get all places from logged user
 router.get('/user', auth.isHost, (req, res) => {
-  const { user_id } = req.auth
+  const { id } = req.auth
   db.select().from('places')
-    .where({ user_id })
+    .where({ user_id: id })
     .then(data => res.json(data))
     .catch(err => res.status(500).send({ error: err.message }))
 })
