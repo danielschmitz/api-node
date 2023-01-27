@@ -1,4 +1,5 @@
 const express = require('express')
+const auth = require('../auth')
 const db = require('../db')
 const StatusCodes = require('../StatusCodes')
 const router = express.Router()
@@ -27,7 +28,7 @@ router.get('/:id/cities', (req, res) => {
 })
 
 // POST new country
-router.post('/', async (req, res) => {
+router.post('/', auth.isLogged, async (req, res) => {
 
     //check country name exists
     const country = await db('countries').where({ name: req.body.name }).first()
@@ -42,7 +43,7 @@ router.post('/', async (req, res) => {
 })
 
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth.isLogged,  async (req, res) => {
 
     //check country name exists
     const country = await db('countries')

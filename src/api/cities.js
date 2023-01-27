@@ -1,4 +1,5 @@
 const express = require('express')
+const auth = require('../auth')
 const db = require('../db')
 const StatusCodes = require('../StatusCodes')
 const router = express.Router()
@@ -23,7 +24,7 @@ router.get('/:id', (req, res) => {
 
 
 // POST new city
-router.post('/', async (req, res) => {
+router.post('/', auth.isLogged, async (req, res) => {
 
     //check city name exists
     const city = await db('cities')
@@ -44,7 +45,7 @@ router.post('/', async (req, res) => {
 })
 
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth.isLogged, async (req, res) => {
 
     if (!req.body.country_id) {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'country_id is required' })

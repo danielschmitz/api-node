@@ -24,6 +24,7 @@ app.use('/api/auth', require('./api/auth'))
 app.use('/api/user', require('./api/user'))
 app.use('/api/countries', require('./api/countries'))
 app.use('/api/cities', require('./api/cities'))
+app.use('/api/places', require('./api/places'))
 
 // eslint-disable-next-line no-undef
 const PORT = process.env.PORT || 3000

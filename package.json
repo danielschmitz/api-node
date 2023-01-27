@@ -1,7 +1,7 @@
 {
   "name": "api-node",
   "version": "0.0.1",
-  "description": "Uma api node minimalista",
+  "description": "A simple node API to my books",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",

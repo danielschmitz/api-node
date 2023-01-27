@@ -1,11 +1,12 @@
 const express = require('express')
-const checkLogin = require('../checkLogin')
+
 const db = require('../db')
 const StatusCodes = require('../StatusCodes')
 const router = express.Router()
 const bcrypt = require('bcrypt')
+const auth = require('../auth')
 
-router.get('/:id', checkLogin, async function (req, res) {
+router.get('/:id', auth.isLogged, async function (req, res) {
     const { id } = req.params
     if (req.auth.id !== id) {
         return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Unauthorized' })
@@ -36,12 +37,12 @@ router.post('/', async function (req, res) {
     return res.status(StatusCodes.OK).json(newUser[0])
 })
 
-router.put('/:id', checkLogin, async function (req, res) {
+router.put('/:id', auth.isLogged, async function (req, res) {
     const { id } = req.params
     const { name, email, password, ishost } = req.body
 
     if (parseInt(req.auth.id) !== parseInt(id)) {
-        return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Unauthorized'})
+        return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Unauthorized User'})
     }
 
     const checkEmail = await db('users')
