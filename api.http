@@ -106,6 +106,8 @@ GET {{host}}/api/places
 ### Get 1 place
 GET {{host}}/api/places/1
 
+
+
 ### New place
 POST {{host}}/api/places/
 Authorization: {{token}}
