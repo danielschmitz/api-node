@@ -4,7 +4,7 @@ const db = require('../db')
 const StatusCodes = require('../StatusCodes')
 const bcrypt = require('bcrypt')
 const jsonwebtoken = require('jsonwebtoken')
-const checkLogin = require('../CheckLogin')
+const checkLogin = require('../checkLogin')
 
 router.get('/hello-world', function (req, res) {
     return res.json({ message: 'hello world from /api/auth' })
@@ -37,7 +37,7 @@ router.post('/login', async function (req, res) {
 
 router.get('/checklogin', checkLogin, async function (req, res) { 
     return res.status(StatusCodes.OK).json({
-        token: req.auth
+        token_info: req.auth
     })
 })
 

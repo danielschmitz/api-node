@@ -1,10 +1,10 @@
 @host = http://localhost:3000
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1c2VyMUBlbWFpbC5jb20iLCJuYW1lIjoidXNlcjEiLCJpc2hvc3QiOjAsImlhdCI6MTY3NDgxNzExOSwiZXhwIjoxNzA2Mzc0NzE5fQ.1xPM40oFV-ooBnlH42iNZ-SUVDhclHrmg4viAKJIXUs
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1c2VyMUBlbWFpbC5jb20iLCJuYW1lIjoidXNlcjEiLCJpc2hvc3QiOjAsImlhdCI6MTY3NDgxOTkyMSwiZXhwIjoxNzA2Mzc3NTIxfQ.oNyuciQCm0z7NOIlGhlREoURzie9gg0aCJWogHsdn5U
 
 ### Simple hello world
 GET {{host}}/hello-world
 
-### simple hello world from /api/auth
+### Simple hello world from /api/auth
 
 GET {{host}}/api/auth/hello-world
 
@@ -22,4 +22,25 @@ content-type: application/json
 GET {{host}}/api/auth/checklogin
 Authorization: {{token}}
 
-###
+### New User
+POST {{host}}/api/user/
+content-type: application/json
+
+{
+    "name": "user5",
+    "email": "user15@email.com",
+    "password": "123456",
+    "ishost": false
+}
+
+### Edit User
+PUT {{host}}/api/user/1
+Authorization: {{token}}
+content-type: application/json
+
+{
+    "name": "user1",
+    "email": "user1@email.com",
+    "password": "123456",
+    "ishost": true
+}
