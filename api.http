@@ -74,4 +74,28 @@ content-type: application/json
     "continent": "North America"
 }
 
+### Get All cities
+GET {{host}}/api/cities
+
+### Get 1 city
+GET {{host}}/api/cities/1
+
+### New city
+POST {{host}}/api/cities/
+content-type: application/json
+
+{
+    "name": "Juiz de Fora",
+    "country_id": "2"
+}
+
+### Edit city
+PUT {{host}}/api/cities/16
+content-type: application/json
+
+{
+    "name": "Juiz de Fora 2",
+    "country_id": "1"
+}
+
 
