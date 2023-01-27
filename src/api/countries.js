@@ -7,7 +7,7 @@ const router = express.Router()
 router.get('/', (req, res) => {
     db.select().from('countries')
         .then(data => res.json(data))
-        .catch(err => res.send(err))
+        .catch(err => res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message))
 })
 
 
@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
     db('countries').where({ id: req.params.id }).first()
         .then(data => res.json(data))
-        .catch(err => res.send(err))
+        .catch(err => res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message))
 })
 
 
@@ -23,7 +23,7 @@ router.get('/:id', (req, res) => {
 router.get('/:id/cities', (req, res) => {
     db.select().from('cities').where({ country_id: req.params.id })
         .then(data => res.json(data))
-        .catch(err => res.send(err))
+        .catch(err => res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message))
 })
 
 // POST new country
@@ -38,7 +38,7 @@ router.post('/', async (req, res) => {
     db.insert(req.body).into('countries')
         .returning(['id','name','capital','continent'])
         .then(data => res.json(data[0]))
-        .catch(err => res.send(err))
+        .catch(err => res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message))
 })
 
 
@@ -58,7 +58,7 @@ router.put('/:id', async (req, res) => {
         .update(req.body)
         .returning(['id','name','capital','continent'])
         .then(data => res.json(data[0]))
-        .catch(err => res.send(err))
+        .catch(err => res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message))
 })
 
 module.exports = router
