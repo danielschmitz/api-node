@@ -17,8 +17,10 @@ const validatePlace = (req, res, next) => {
 // Create place
 router.post('/', [validatePlace, auth.isHost], (req, res) => {
   const { name, address, price, city_id } = req.body
-  db.insert({ name, address, price, user_id: req.auth.id, city_id }).into('places')
-    .then(data => res.json(data))
+  db('places')
+    .insert({ name, address, price, user_id: req.auth.id, city_id })
+    .returning('*')
+    .then(data => res.status(StatusCodes.CREATED).json(data[0]))
     .catch(err => res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err.message }))
 })
 

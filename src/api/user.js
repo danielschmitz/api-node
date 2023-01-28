@@ -34,7 +34,7 @@ router.post('/', async function (req, res) {
     const newUser = await db('users')
         .insert({ name, email, password: hashedPassword, ishost })
         .returning(['id', 'name', 'email', 'ishost'])
-    return res.status(StatusCodes.OK).json(newUser[0])
+    return res.status(StatusCodes.CREATED).json(newUser[0])
 })
 
 router.put('/:id', auth.isLogged, async function (req, res) {

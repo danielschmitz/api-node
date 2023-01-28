@@ -40,7 +40,7 @@ router.post('/', auth.isLogged, async (req, res) => {
 
     db.insert(req.body).into('cities')
         .returning(['id', 'name', 'country_id'])
-        .then(data => res.json(data[0]))
+        .then(data => res.status(StatusCodes.CREATED).json(data[0]))
         .catch(err => res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message))
 })
 

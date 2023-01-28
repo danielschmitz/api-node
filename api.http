@@ -122,8 +122,8 @@ Authorization: {{token}}
 content-type: application/json
 
 {
-    "name": "Place 1a",
-    "address": "Address 1a",
+    "name": "Place 1ab",
+    "address": "Address 1ab",
     "price": 222.9,
     "user_id": 1,
     "city_id": 1
