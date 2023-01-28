@@ -1,80 +1,60 @@
 const express = require('express')
-const router = express.Router()
 const db = require('../db')
-const multer = require('multer')
-const upload = multer()
+const router = express.Router()
 
-const validateFields = (req, res, next) => {
-    const { name, place_id } = req.body
-    if (!name || !place_id) {
-        res.status(400).json({ error: 'Missing required fields' })
-    } else {
-        next()
+
+// Validate request body
+const validatePhoto = (req, res, next) => {
+    const { name, photo, place_id } = req.body
+    if (!name || !photo || !place_id) {
+        return res.status(400).send({ error: 'Missing required fields' })
     }
+    next()
 }
 
-router.post('', upload.single('photo'), validateFields, async (req, res) => {
-    try {
-        // insert photo into database
-        const { name, place_id } = req.body
-        const photo = req.file.buffer
-        const inserted = await db('photos').insert({ name, place_id, photo })
-        res.status(201).json({ id: inserted[0] })
-    } catch (error) {
-        res.status(500).json({ error })
-    }
+// Create photo
+router.post('/', [validatePhoto], (req, res) => {
+    const { name, photo, place_id } = req.body
+    db('photos')
+        .insert({ name, photo, place_id })
+        .returning('*')
+        .then(data => res.status(201).json(data[0]))
+        .catch(err => res.status(500).send({ error: err.message }))
 })
 
-router.get('/:id', async (req, res) => {
-    try {
-        const { id } = req.params
-        const photo = await db('photos')
-            .where({ id })
-            .select(['name', 'place_id', 'photo'])
-            .first()
-        if (!photo) {
-            res.status(404).json({ error: 'Photo not found' })
-        } else {
-            res.status(200).json(photo)
-        }
-    } catch (error) {
-        res.status(500).json({ error })
-    }
+// Get all photos
+router.get('/:id', (req, res) => {
+    const place_id = req.params.id
+    db.select().from('photos').where({ place_id })
+        .then(data => res.status(200).json(data))
+        .catch(err => res.status(500).send({ error: err.message }))
 })
 
-router.put('/:id', upload.single('photo'), validateFields, async (req, res) => {
-    try {
-        // update photo in the database
-        const { id } = req.params
-        const { name, place_id } = req.body
-        let photo = null
-        if (req.file) {
-            photo = req.file.buffer
-        }
-        const count = await db('photos').where({ id }).update({ name, place_id, photo })
-        if (count === 0) {
-            res.status(404).json({ error: 'Photo not found' })
-        } else {
-            res.status(200).json({})
-        }
-    } catch (error) {
-        res.status(500).json({ error })
-    }
+// Get one photo by id
+router.get('/:idplace/:idphoto', (req, res) => {
+    db.select()
+        .from('photos').where({ id: req.params.idphoto, place_id: req.params.idplace })
+        .first()
+        .then(data => res.status(200).send(data))
+        .catch(err => res.status(500).send({ error: err.message }))
 })
 
-router.delete('/:id', async (req, res) => {
-    try {
-        // delete photo from the database
-        const { id } = req.params
-        const count = await db('photos').where({ id }).del()
-        if (count === 0) {
-            res.status(404).json({ error: 'Photo not found' })
-        } else {
-            res.status(204).json({})
-        }
-    } catch (error) {
-        res.status(500).json({ error })
-    }
+// Update photo
+router.put('/:id', [validatePhoto], (req, res) => {
+    const { name, photo, place_id } = req.body
+    db('photos')
+        .where({ id: req.params.id })
+        .update({ name, photo, place_id })
+        .returning('*')
+        .then(data => res.json(data))
+        .catch(err => res.status(500).send({ error: err.message }))
+})
+
+// Delete photo
+router.delete('/:id', (req, res) => {
+    db('photos').where({ id: req.params.id }).del()
+        .then(() => res.status(200).json({ message: 'Photo deleted' }))
+        .catch(err => res.status(500).send({ error: err.message }))
 })
 
 module.exports = router

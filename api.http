@@ -142,3 +142,8 @@ content-type: application/json
     "city_id": 1
 }
 
+### Get Photos from place
+GET {{host}}/api/photos/1
+
+### Get Photos from place
+GET {{host}}/api/photos/5/1
