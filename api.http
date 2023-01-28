@@ -1,3 +1,9 @@
+### NEED VSCode Extension: REST Client
+Id: humao.rest-client
+Description: REST Client for Visual Studio Code
+VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+###
+
 @host = http://localhost:3000
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1c2VyMUBlbWFpbC5jb20iLCJuYW1lIjoidXNlcjEiLCJpc2hvc3QiOjEsImlhdCI6MTY3NDgzMzA3OSwiZXhwIjoxNzA2MzkwNjc5fQ.L8AndWnE0c3aggnABY0DoOT2p69Vu2pVv_hsw_dhjGA
 
