@@ -13,7 +13,7 @@ const validateFields = (req, res, next) => {
     }
 }
 
-router.post('/photos', upload.single('photo'), validateFields, async (req, res) => {
+router.post('', upload.single('photo'), validateFields, async (req, res) => {
     try {
         // insert photo into database
         const { name, place_id } = req.body
@@ -25,10 +25,13 @@ router.post('/photos', upload.single('photo'), validateFields, async (req, res) 
     }
 })
 
-router.get('/photos/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
     try {
         const { id } = req.params
-        const photo = await db('photos').where({ id }).first()
+        const photo = await db('photos')
+            .where({ id })
+            .select(['name', 'place_id', 'photo'])
+            .first()
         if (!photo) {
             res.status(404).json({ error: 'Photo not found' })
         } else {
@@ -39,7 +42,7 @@ router.get('/photos/:id', async (req, res) => {
     }
 })
 
-router.put('/photos/:id', upload.single('photo'), validateFields, async (req, res) => {
+router.put('/:id', upload.single('photo'), validateFields, async (req, res) => {
     try {
         // update photo in the database
         const { id } = req.params
@@ -59,7 +62,7 @@ router.put('/photos/:id', upload.single('photo'), validateFields, async (req, re
     }
 })
 
-router.delete('/photos/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
     try {
         // delete photo from the database
         const { id } = req.params
