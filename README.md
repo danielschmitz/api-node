@@ -14,6 +14,9 @@ npm run dev
 
 API is litening at http://localhost:3000
 
+Use the "Rest Client" VSCode Extension to make calls to API
+https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+
 # database orm
 
 ![](database.png)
