@@ -1,4 +1,5 @@
 const express = require('express')
+const auth = require('../auth')
 const db = require('../db')
 const router = express.Router()
 
@@ -13,7 +14,7 @@ const validatePhoto = (req, res, next) => {
 }
 
 // Create photo
-router.post('/', [validatePhoto], (req, res) => {
+router.post('/', [validatePhoto, auth.isLogged], (req, res) => {
     const { name, photo, place_id } = req.body
     db('photos')
         .insert({ name, photo, place_id })
@@ -40,7 +41,7 @@ router.get('/:idplace/:idphoto', (req, res) => {
 })
 
 // Update photo
-router.put('/:id', [validatePhoto], (req, res) => {
+router.put('/:id', [validatePhoto, auth.isLogged], (req, res) => {
     const { name, photo, place_id } = req.body
     db('photos')
         .where({ id: req.params.id })
@@ -51,7 +52,7 @@ router.put('/:id', [validatePhoto], (req, res) => {
 })
 
 // Delete photo
-router.delete('/:id', (req, res) => {
+router.delete('/:id', auth.isLogged, (req, res) => {
     db('photos').where({ id: req.params.id }).del()
         .then(() => res.status(200).json({ message: 'Photo deleted' }))
         .catch(err => res.status(500).send({ error: err.message }))
