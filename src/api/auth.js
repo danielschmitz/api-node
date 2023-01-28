@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const db = require('../db')
-const StatusCodes = require('../StatusCodes')
 const bcrypt = require('bcrypt')
 const jsonwebtoken = require('jsonwebtoken')
 const auth = require('../auth')
@@ -14,11 +13,11 @@ router.post('/login', async function (req, res) {
     const { email, password } = req.body
     const user = await db('users').where({ email }).first()
     if (!user) {
-        return res.status(StatusCodes.NOT_FOUND).json({ message: 'No user found with that email' })
+        return res.status(404).json({ message: 'No user found with that email' })
     }
     const validatePassword = await bcrypt.compare(password, user.password)
     if (!validatePassword) {
-        return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Incorrect password' })
+        return res.status(401).json({ message: 'Incorrect password' })
     }
     const token = jsonwebtoken.sign(
         {
@@ -32,11 +31,11 @@ router.post('/login', async function (req, res) {
             expiresIn: '1y'
         }
     )
-    return res.status(StatusCodes.OK).send(token)
+    return res.status(200).send(token)
 })
 
 router.get('/checklogin', auth.isLogged, async function (req, res) { 
-    return res.status(StatusCodes.OK).json({
+    return res.status(200).json({
         token_info: req.auth
     })
 })

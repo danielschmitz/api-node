@@ -1,7 +1,6 @@
 const express = require('express')
 
 const db = require('../db')
-const StatusCodes = require('../StatusCodes')
 const router = express.Router()
 const bcrypt = require('bcrypt')
 const auth = require('../auth')
@@ -9,13 +8,13 @@ const auth = require('../auth')
 router.get('/:id', auth.isLogged, async function (req, res) {
     const { id } = req.params
     if (req.auth.id !== id) {
-        return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Unauthorized' })
+        return res.status(401).json({ message: 'Unauthorized' })
     }
     const user = await db('users').where({ id }).first()
     if (!user) {
-        return res.status(StatusCodes.NOT_FOUND).json({ message: 'No user found with that id' })
+        return res.status(404).json({ message: 'No user found with that id' })
     }
-    return res.status(StatusCodes.OK).json({
+    return res.status(200).json({
         id: user.id,
         email: user.email,
         name: user.name,
@@ -27,14 +26,14 @@ router.post('/', async function (req, res) {
     const { name, email, password, ishost } = req.body
     const user = await db('users').where({ email }).first()
     if (user) {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'User email exists' })
+        return res.status(500).json({ message: 'User email exists' })
     }
     //create user
     const hashedPassword = await bcrypt.hash(password, 10)
     const newUser = await db('users')
         .insert({ name, email, password: hashedPassword, ishost })
         .returning(['id', 'name', 'email', 'ishost'])
-    return res.status(StatusCodes.CREATED).json(newUser[0])
+    return res.status(201).json(newUser[0])
 })
 
 router.put('/:id', auth.isLogged, async function (req, res) {
@@ -42,7 +41,7 @@ router.put('/:id', auth.isLogged, async function (req, res) {
     const { name, email, password, ishost } = req.body
 
     if (parseInt(req.auth.id) !== parseInt(id)) {
-        return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Unauthorized User'})
+        return res.status(401).json({ message: 'Unauthorized User'})
     }
 
     const checkEmail = await db('users')
@@ -50,7 +49,7 @@ router.put('/:id', auth.isLogged, async function (req, res) {
         .first()
 
     if (checkEmail) {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'User email exists' })
+        return res.status(500).json({ message: 'User email exists' })
     }
 
     const user = await db('users')
@@ -58,7 +57,7 @@ router.put('/:id', auth.isLogged, async function (req, res) {
         .update({ name, email, password, ishost })
         .returning(['id', 'name', 'email', 'ishost'])
 
-    return res.status(StatusCodes.OK).json(user[0])
+    return res.status(200).json(user[0])
 
 })
 

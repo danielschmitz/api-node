@@ -1,14 +1,13 @@
 const express = require('express')
 const auth = require('../auth')
 const db = require('../db')
-const StatusCodes = require('../StatusCodes')
 const router = express.Router()
 
 // GET all countries
 router.get('/', (req, res) => {
     db.select().from('countries')
         .then(data => res.json(data))
-        .catch(err => res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message))
+        .catch(err => res.status(500).send(err.message))
 })
 
 
@@ -16,7 +15,7 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
     db('countries').where({ id: req.params.id }).first()
         .then(data => res.json(data))
-        .catch(err => res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message))
+        .catch(err => res.status(500).send(err.message))
 })
 
 
@@ -24,7 +23,7 @@ router.get('/:id', (req, res) => {
 router.get('/:id/cities', (req, res) => {
     db.select().from('cities').where({ country_id: req.params.id })
         .then(data => res.json(data))
-        .catch(err => res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message))
+        .catch(err => res.status(500).send(err.message))
 })
 
 // POST new country
@@ -33,13 +32,13 @@ router.post('/', auth.isLogged, async (req, res) => {
     //check country name exists
     const country = await db('countries').where({ name: req.body.name }).first()
     if (country) {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Country name exists', country })
+        return res.status(500).json({ message: 'Country name exists', country })
     }
 
     db.insert(req.body).into('countries')
         .returning(['id','name','capital','continent'])
-        .then(data => res.status(StatusCodes.CREATED).json(data[0]))
-        .catch(err => res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message))
+        .then(data => res.status(201).json(data[0]))
+        .catch(err => res.status(500).send(err.message))
 })
 
 
@@ -51,7 +50,7 @@ router.put('/:id', auth.isLogged,  async (req, res) => {
         .whereNot({ id: req.params.id })
         .first()
     if (country) {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Country name exists', country })
+        return res.status(500).json({ message: 'Country name exists', country })
     }
 
     db('countries')
@@ -59,7 +58,7 @@ router.put('/:id', auth.isLogged,  async (req, res) => {
         .update(req.body)
         .returning(['id','name','capital','continent'])
         .then(data => res.json(data[0]))
-        .catch(err => res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message))
+        .catch(err => res.status(500).send(err.message))
 })
 
 module.exports = router

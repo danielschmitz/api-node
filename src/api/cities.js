@@ -1,7 +1,6 @@
 const express = require('express')
 const auth = require('../auth')
 const db = require('../db')
-const StatusCodes = require('../StatusCodes')
 const router = express.Router()
 
 // GET all cities
@@ -9,7 +8,7 @@ router.get('/', (req, res) => {
     db.select(['cities.*', 'countries.name as country_name']).from('cities')
         .join('countries', 'countries.id', '=', 'cities.country_id')
         .then(data => res.json(data))
-        .catch(err => res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message))
+        .catch(err => res.status(500).send(err.message))
 })
 
 
@@ -19,7 +18,7 @@ router.get('/:id', (req, res) => {
         .join('countries', 'countries.id', '=', 'cities.country_id')
         .where({ 'cities.id': req.params.id }).first()
         .then(data => res.json(data))
-        .catch(err => res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message))
+        .catch(err => res.status(500).send(err.message))
 })
 
 
@@ -31,24 +30,24 @@ router.post('/', auth.isLogged, async (req, res) => {
         .where({ name: req.body.name })
         .first()
     if (city) {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'city name exists', city })
+        return res.status(500).json({ message: 'city name exists', city })
     }
 
     if (!req.body.country_id) {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'country_id is required' })
+        return res.status(500).json({ message: 'country_id is required' })
     }
 
     db.insert(req.body).into('cities')
         .returning(['id', 'name', 'country_id'])
-        .then(data => res.status(StatusCodes.CREATED).json(data[0]))
-        .catch(err => res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message))
+        .then(data => res.status(201).json(data[0]))
+        .catch(err => res.status(500).send(err.message))
 })
 
 
 router.put('/:id', auth.isLogged, async (req, res) => {
 
     if (!req.body.country_id) {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'country_id is required' })
+        return res.status(500).json({ message: 'country_id is required' })
     }
 
     //check city name exists
@@ -57,7 +56,7 @@ router.put('/:id', auth.isLogged, async (req, res) => {
         .whereNot({ id: req.params.id })
         .first()
     if (city) {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'city name exists', city })
+        return res.status(500).json({ message: 'city name exists', city })
     }
 
     db('cities')
@@ -65,7 +64,7 @@ router.put('/:id', auth.isLogged, async (req, res) => {
         .update(req.body)
         .returning(['id', 'name', 'country_id'])
         .then(data => res.json(data[0]))
-        .catch(err => res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err.message))
+        .catch(err => res.status(500).send(err.message))
 })
 
 module.exports = router
