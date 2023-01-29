@@ -147,3 +147,30 @@ GET {{host}}/api/photos/1
 
 ### Get Photos from place
 GET {{host}}/api/photos/5/1
+
+
+### Get booking by place
+GET {{host}}/api/bookings/place/1
+
+### Get booking 
+GET {{host}}/api/bookings/1
+
+### Check booking date
+POST {{host}}/api/bookings/check/1
+content-type: application/json
+
+{
+    "day": "2022-01-03 13:00:00"
+}
+
+### Create booking
+POST {{host}}/api/bookings/
+Authorization: {{token}}
+content-type: application/json
+
+{
+    "place_id": 1,
+    "start_date": "2022-01-03 13:00:00",
+    "end_date": "2022-01-03 13:00:00",
+    "price": 100
+}

@@ -26,7 +26,7 @@ app.use('/api/countries', require('./api/countries'))
 app.use('/api/cities', require('./api/cities'))
 app.use('/api/places', require('./api/places'))
 app.use('/api/photos', require('./api/photos'))
-app.use('/api/booking', require('./api/booking'))
+app.use('/api/bookings', require('./api/bookings'))
 
 // eslint-disable-next-line no-undef
 const PORT = process.env.PORT || 3000
