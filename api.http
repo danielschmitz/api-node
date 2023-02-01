@@ -170,7 +170,8 @@ content-type: application/json
 
 {
     "place_id": 1,
-    "start_date": "2022-01-03 13:00:00",
-    "end_date": "2022-01-03 13:00:00",
+    "user_id": 3,
+    "start_date": "2022-01-10 15:02:00",
+    "end_date": "2022-01-20 14:00:00",
     "price": 100
 }

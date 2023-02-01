@@ -37,10 +37,24 @@ router.get('/:id', (req, res) => {
         .catch(err => res.status(500).send({ error: err.message }))
 })
 
-router.post('/', [validateBooking, auth.isLogged], (req, res) => {
+router.post('/', [validateBooking, auth.isLogged], async (req, res) => {
     const { place_id, start_date, end_date, price, user_id } = req.body
-    db('booking')
-        .insert({ place_id, start_date, end_date, price, user_id })
+
+    const reserved = await db('bookings')
+        .select('*')
+        .where('start_date','<=',new Date(start_date))
+        .where('end_date','>=',new Date(start_date))
+        .where('place_id',place_id)
+
+    if (reserved.length > 0) {
+        return res.status(400).send({ error: 'Booking already reserved', reserved })
+    }
+
+    db('bookings')
+        .insert({ 
+            place_id, 
+            start_date: new Date(start_date), 
+            end_date: new Date(end_date), price, user_id })
         .returning('*')
         .then(data => res.status(201).json(data[0]))
         .catch(err => res.status(500).send({ error: err.message }))
